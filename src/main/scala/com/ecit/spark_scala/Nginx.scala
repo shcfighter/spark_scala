@@ -11,12 +11,13 @@ object Nginx {
     var spark = SparkSession.builder().appName("nginx").getOrCreate()
     var accessRdd = spark.read.textFile("hdfs://localhost:9000/data/input/access.log").rdd
     var accesss = accessRdd.filter(line => {
+      line.contains(".html")
       println("==========================================")
       var logs = parseLog(line)
       if(logs(2).contains(".html")){
-        return true
+        true
       }
-      return false;
+      false
     }).map(line => (line, 1)).reduceByKey(_ + _)
     /*var accesss = accessRdd.map(a => parseLog(a))
       .filter(line => {
@@ -27,6 +28,14 @@ object Nginx {
       return false;
     })*/
     accesss.saveAsTextFile("hdfs://localhost:9000/data/nginx")
+  }
+
+  def onlyStrings(a: String) = {
+    var logs = parseLog(a)
+    if(logs(2).contains(".html")){
+      true
+    }
+     false;
   }
 
   def parseLog(log: String): Array[String] = {
