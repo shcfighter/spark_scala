@@ -11,7 +11,6 @@ object Nginx {
     var spark = SparkSession.builder().appName("nginx").getOrCreate()
     var accessRdd = spark.read.textFile("hdfs://localhost:9000/data/input/access.log").rdd
     var accesss = accessRdd.filter(line => {
-      line.contains(".html")
       println("==========================================")
       var logs = parseLog(line)
       if(logs(2).contains(".html")){
