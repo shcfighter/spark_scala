@@ -24,13 +24,13 @@ object Nginx {
     var data = pattern.findAllIn(log).matchData
     var array = new Array[String](7);
     data.foreach(m => {
-      array += m.group(1)
-      array += m.group(2)
-      array += m.group(3)
-      array += m.group(4)
-      array += m.group(5)
-      array += m.group(6)
-      array += m.group(7)
+      array(0) = m.group(1)
+      array(1) = m.group(2)
+      array(2) = m.group(3)
+      array(3) = m.group(4)
+      array(4) = m.group(5)
+      array(5) = m.group(6)
+      array(6) = m.group(7)
     })
     return array.mkString(",")
   }
