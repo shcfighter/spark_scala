@@ -13,19 +13,14 @@ object Nginx {
     var accesss = accessRdd.filter(line => {
       println("==========================================")
       var logs = parseLog(line)
+      if(logs.length < 2){
+        false
+      }
       if(logs(2).contains(".html")){
         true
       }
       false
     }).map(line => (line, 1)).reduceByKey(_ + _)
-    /*var accesss = accessRdd.map(a => parseLog(a))
-      .filter(line => {
-      println("==========================================")
-      if(line(2).contains(".html")){
-        return true
-      }
-      return false;
-    })*/
     accesss.saveAsTextFile("hdfs://localhost:9000/data/nginx")
   }
 
