@@ -13,8 +13,7 @@ object Nginx {
     var accesss = accessRdd.map(a => parseLog(a))
       .filter(line => {
       println("==========================================")
-      var arrayLog = line.split(",")
-      if(arrayLog(2).contains(".html")){
+      if(line(2).contains(".html")){
         return true
       }
       return false;
