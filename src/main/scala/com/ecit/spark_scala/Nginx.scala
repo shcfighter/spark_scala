@@ -12,11 +12,14 @@ object Nginx {
     var accessRdd = spark.read.textFile("hdfs://localhost:9000/data/input/access.log").rdd
     var accesss = accessRdd.filter(line => {
       var logs = parseLog(line)
-      if(logs.length < 2){
+      if(logs.length <= 0){
         false
       }
-      println(logs)
-      if(logs(2).contains(".html")){
+	if(null != logs(2)){
+		println(logs.mkString(","))
+		false
+	}
+      if(null != logs(2) && logs(2).contains(".html")){
         true
       }
       false
