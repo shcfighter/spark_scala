@@ -35,18 +35,32 @@ object Nginx {
      false;
   }
 
-  def parseLog(log: String): Array[String] = {
-    var data = pattern.findAllIn(log).matchData
+	def parseLog(log: String): Array[String] = {
     var array = new Array[String](7);
-    data.foreach(m => {
-      array(0) = m.group(1)
-      array(1) = m.group(2)
-      array(2) = m.group(3)
-      array(3) = m.group(4)
-      array(4) = m.group(5)
-      array(5) = m.group(6)
-      array(6) = m.group(7)
-    })
+    if(pattern.pattern.matcher(log).matches()){
+      var data = pattern.findAllIn(log).matchData
+      data.foreach(m => {
+        array(0) = m.group(1)
+        array(1) = m.group(2)
+        array(2) = m.group(3)
+        array(3) = m.group(4)
+        array(4) = m.group(5)
+        array(5) = m.group(6)
+        array(6) = m.group(7)
+      })
+    } else if(pattern2.pattern.matcher(log).matches()){
+      var data = pattern.findAllIn(log).matchData
+      data.foreach(m => {
+        array(0) = m.group(1)
+        array(1) = m.group(2)
+        array(2) = m.group(3)
+        array(3) = m.group(4)
+        array(4) = m.group(5)
+        array(5) = m.group(6)
+        array(6) = m.group(7)
+      })
+    }
+
     return array
   }
 }
