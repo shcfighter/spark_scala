@@ -1,11 +1,11 @@
 package com.ecit.spark_scala
 
-import org.apache.spark.SparkContext
 import org.apache.spark.sql.SparkSession
 
 object Nginx {
 
   val pattern = "^(\\d+\\.\\d+\\.\\d+\\.\\d+)\\s\\-\\s-\\s(\\[[^\\[\\]]+\\])\\s(\\\"(?:[^\"]|\\\")+|-\\\")\\s(\\d{3})\\s(\\d+|-)\\s(\\\"(?:[^\"]|\\\")+|-\\\")\\s(\\\"(?:[^\"]|\\\")+|-\\\")$".r
+  val pattern2 = "^(\\d+\\.\\d+\\.\\d+\\.\\d+)\\s(\\[[^\\[\\]]+\\])\\s(\\\"(?:[^\"]|\\\")+|-\\\")\\s(\\d{3})\\s(\\d+|-)\\s(\\\"(?:[^\"]|\\\")+|-\\\")\\s(\\\"(?:[^\"]|\\\")+|-\\\")\\s(\\\"-\\\")$".r
 
   def main(args: Array[String]): Unit = {
     var spark = SparkSession.builder().appName("nginx").getOrCreate()
@@ -15,10 +15,10 @@ object Nginx {
       if(logs.length <= 0){
         false
       }
-	if(null != logs(2)){
-		println(logs.mkString(","))
-		false
-	}
+      if(null != logs(2)){
+        println(logs.mkString(","))
+        false
+      }
       if(null != logs(2) && logs(2).contains(".html")){
         true
       }
@@ -27,15 +27,7 @@ object Nginx {
     accesss.saveAsTextFile("hdfs://localhost:9000/data/nginx")
   }
 
-  def onlyStrings(a: String) = {
-    var logs = parseLog(a)
-    if(logs(2).contains(".html")){
-      true
-    }
-     false;
-  }
-
-	def parseLog(log: String): Array[String] = {
+  def parseLog(log: String): Array[String] = {
     var array = new Array[String](7);
     if(pattern.pattern.matcher(log).matches()){
       var data = pattern.findAllIn(log).matchData
@@ -49,7 +41,7 @@ object Nginx {
         array(6) = m.group(7)
       })
     } else if(pattern2.pattern.matcher(log).matches()){
-      var data = pattern.findAllIn(log).matchData
+      var data = pattern2.findAllIn(log).matchData
       data.foreach(m => {
         array(0) = m.group(1)
         array(1) = m.group(2)
