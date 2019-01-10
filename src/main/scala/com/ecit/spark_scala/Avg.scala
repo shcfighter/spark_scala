@@ -7,9 +7,9 @@ object Avg {
     var conf = new SparkConf();
     var sc = new SparkContext(conf);
     var rdd = sc.textFile("file:///root/book.txt");
-    var rdd2 = rdd.map(line => line.replace(",", " "))
+    var rdd2 = rdd.map(line => line.split(","))
     rdd2.foreach(line => println(line))
     println("================================================================================")
-    rdd.flatMap(line => line.replace(",", " ")).foreach(line => println(line))
+    rdd2.map(line => (line(0), line(1))).map(line => (line, 1)).reduceByKey((x, y) => (x + y) / (x + y)).collect()
   }
 }
