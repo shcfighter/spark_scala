@@ -9,6 +9,8 @@ object TestSql {
     var df = sparkSession.read.json("file:///root/people.json");
     df.createTempView("people");
     df.select("name", "age").show();
+    println("================================================================");
+    sparkSession.sql("select * from people").show();
   }
 
 }
