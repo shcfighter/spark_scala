@@ -11,5 +11,7 @@ object Streaming {
     var ds = streamingContext.textFileStream("file:///root/logfile/")
     var ds2 = ds.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_ + _)
     ds2.foreachRDD(_.foreach(println(_)))
+    streamingContext.start()
+    streamingContext.awaitTermination()
   }
 }
