@@ -1,10 +1,10 @@
 package com.ecit.spark_sql
 
-import com.ecit.spark_sql.SparkSQLExample.Person
 import org.apache.spark.sql.SparkSession
 
 object TestSql {
 
+  case class Person(name: String, age: Long)
   def main(args: Array[String]): Unit = {
     var spark = SparkSession.builder().appName("app_spark_sql").getOrCreate()
 
@@ -24,12 +24,11 @@ object TestSql {
   }
 
   def text(spark: SparkSession): Unit ={
-    //case class Person(name: String, age: Long)
     import spark.implicits._
     var df = spark.sparkContext
       .textFile("file:///root/people.txt")
       .map(_.split(","))
-      .map(arr => Person(arr(1), arr(2).toLong)).toDF()
+      .map(arr => Person(arr(0), arr(1).toLong)).toDF()
 
     df.createTempView("people2")
 
@@ -40,7 +39,7 @@ object TestSql {
       .toDF()
     // Register the DataFrame as a temporary view
     peopleDF.createOrReplaceTempView("people")*/
-    spark.sql("select * from people2 where age > 0").show()
+    spark.sql("select * from people2 where age > 0").foreach(row => println(row.getAs(0), " ", row.getAs(1)))
   }
 
 }
