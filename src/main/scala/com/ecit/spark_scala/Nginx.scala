@@ -10,12 +10,11 @@ object Nginx {
   def main(args: Array[String]): Unit = {
     var spark = SparkSession.builder().appName("nginx").getOrCreate()
     var accessRdd = spark.read.textFile("file:////usr/local/nginx/nginx-1.14.0/webserver/logs/access.log").rdd
-    var accesss = accessRdd.filter(line => {
-      var logs = parseLog(line)
-      if(logs.length <= 0){
+    var accesss = accessRdd.map(line => parseLog(line)).filter(arr => {
+      if(arr.length <= 0){
         false
       }
-      if(null != logs(2)){
+      if(null != arr(2)){
         //println(logs.mkString(","))
         false
       }
@@ -23,7 +22,7 @@ object Nginx {
         true
       }*/
       true
-    })
+    }).map(arr => arr.mkString("\t"))
     accesss.saveAsTextFile("hdfs://localhost:9000/data/nginx")
   }
 
