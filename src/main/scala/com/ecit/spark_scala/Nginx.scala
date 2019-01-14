@@ -9,7 +9,7 @@ object Nginx {
 
   def main(args: Array[String]): Unit = {
     var spark = SparkSession.builder().appName("nginx").getOrCreate()
-    var accessRdd = spark.read.textFile("hdfs://localhost:9000/data/input/access.log").rdd
+    var accessRdd = spark.read.textFile("file:////usr/local/nginx/nginx-1.14.0/webserver/logs/access.log").rdd
     var accesss = accessRdd.filter(line => {
       var logs = parseLog(line)
       if(logs.length <= 0){
