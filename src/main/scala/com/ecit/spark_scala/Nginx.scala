@@ -16,14 +16,14 @@ object Nginx {
         false
       }
       if(null != logs(2)){
-        println(logs.mkString(","))
+        //println(logs.mkString(","))
         false
       }
-      if(null != logs(2) && logs(2).contains(".html")){
+      /*if(null != logs(2) && logs(2).contains(".html")){
         true
-      }
-      false
-    }).map(line => (line, 1)).reduceByKey(_ + _)
+      }*/
+      true
+    })
     accesss.saveAsTextFile("hdfs://localhost:9000/data/nginx")
   }
 

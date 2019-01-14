@@ -11,7 +11,7 @@ import kafka.serializer.StringDecoder
 
 object WordCount {
   def main(args: Array[String]): Unit = {
-    if (args.length < 2) {
+    if (args.length < 3) {
       println("WordCount zkserver1:9092, zkserver2:9092,zkserver3:9092 consumeMsgDataTimeInterval(secs) topics")
       System.exit(1)
     }
