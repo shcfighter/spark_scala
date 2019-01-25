@@ -7,9 +7,9 @@ object WindowBasedTopWord {
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf().setAppName("WindowBasedTopWord").setMaster("local[2]")
     val ssc = new StreamingContext(conf,Durations.seconds(5)) //这里的5秒是指切分RDD的间隔
-    ssc.checkpoint("hdfs://h15:8020/wordcount_checkpoint") //设置docheckpoint目录,没有会自动创建
+    ssc.checkpoint("hdfs://localhost:9000/wordcount_checkpoint") //设置docheckpoint目录,没有会自动创建
 
-    val words = ssc.socketTextStream("h15",8888) //可以从kafka集群中获取信息
+    val words = ssc.socketTextStream("localhost",8888) //可以从kafka集群中获取信息
     val pairs = words.flatMap(_.split(" ")).map(x => (x,1))
 
     pairs.foreachRDD(rdd => {
